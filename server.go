@@ -35,8 +35,12 @@ func Serve(c *Config) (err error) {
 	log.Println(fmt.Sprintf("Starting server %s on at %s:%d ...", VERSION, c.Server.Address, c.Server.Port))
 
 	pageCntrl := NewPageController()
+	tagCntrl := NewTagController()
+	printCntrl := NewPrintController(c.Tag.Template)
 
 	reHandler := new(RegexpHandler)
+	reHandler.AddRoute("^/api/print$", printCntrl.PrintTagHandler)
+	reHandler.AddRoute("^/new$", tagCntrl.NewTagHandler)
 	reHandler.AddRoute("^/([^/\\.]+)$", pageCntrl.PageHandler)
 	reHandler.AddRoute("^/$", pageCntrl.IndexHandler)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%d", c.Server.Address, c.Server.Port), reHandler))

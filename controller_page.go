@@ -23,10 +23,11 @@ func NewPageController() (c *PageController) {
 	return
 }
 
-func (c *PageController) PageHandler(w http.ResponseWriter, r *http.Request, matches []string) {
-	w.Header().Add("X-Click-Counter-Iframe-Version", VERSION)
+func (c *PageController) RenderPage(w http.ResponseWriter, r *http.Request, templateName string, data map[string]interface{}) {
+	w.Header().Add("X-Nametagprinter-Version", VERSION)
 	if r.Method != "GET" {
 		w.WriteHeader(400)
+		HttpProblem(w, http.StatusBadRequest, "Expected application/json got "+r.Header.Get("Content-Type"))
 		return
 	}
 
@@ -36,11 +37,9 @@ func (c *PageController) PageHandler(w http.ResponseWriter, r *http.Request, mat
 	// w.Header().Add("Last-Modified", domain.Updated.Format(http.TimeFormat))
 
 	var tpl *template.Template
-	var data map[string]string
-	data = make(map[string]string)
 	data["Version"] = VERSION
 
-	tpl, err := c.getPageTemplate(matches[0])
+	tpl, err := c.getPageTemplate(templateName)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Println("failed to load template")
@@ -55,6 +54,10 @@ func (c *PageController) PageHandler(w http.ResponseWriter, r *http.Request, mat
 		log.Println(err.Error())
 		return
 	}
+}
+
+func (c *PageController) PageHandler(w http.ResponseWriter, r *http.Request, matches []string) {
+	c.RenderPage(w, r, matches[0], make(map[string]interface{}))
 }
 
 func (c *PageController) IndexHandler(w http.ResponseWriter, r *http.Request, matches []string) {

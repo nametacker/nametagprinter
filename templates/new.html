@@ -4,30 +4,108 @@
     <title>New nametag | Nametag Printer {{.Version}}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans">
-	<style type="text/css">
-		body {
-			font-family: 'Open Sans', serif;
-		}
-		article header {
-			margin-bottom: 2em;
-			margin-top: 2em;
-		}
-	</style>
+    <style type="text/css">
+        body {
+            font-family: 'Open Sans', serif;
+        }
+
+        article header {
+            margin-bottom: 1em;
+        }
+
+        label, p {
+            font-size: 2em;
+        }
+
+        form {
+            margin-bottom: 2em;
+        }
+
+    </style>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
+    <script type="text/javascript">
+        'use strict';
+
+        angular.module('nametageprinterApp', ['nametageprinterApp.services', 'nametageprinterApp.controllers'])
+                .config(['$locationProvider', function ($locationProvider) {
+                    $locationProvider.html5Mode(true);
+                }])
+                .config(['$interpolateProvider', function ($interpolateProvider) {
+                    $interpolateProvider.startSymbol('%%');
+                    $interpolateProvider.endSymbol('%%');
+                }])
+                .config(['$httpProvider', function ($httpProvider) {
+                    $httpProvider.defaults.headers.common.Accept = "application/json";
+                }])
+        ;
+        angular.module('nametageprinterApp.services', ['nametageprinterApp.controllers']);
+        angular.module('nametageprinterApp.controllers', []);
+
+        angular.module('nametageprinterApp.controllers').controller('NewTagFormController', ['$scope', '$http', function ($scope, $http) {
+            $scope.registration = {};
+            $scope.formstate = "form";
+
+            function success() {
+                $scope.formstate = "success";
+            }
+
+            function error() {
+                $scope.formstate = "error";
+            }
+
+            $scope.submit = function () {
+                $scope.formstate = "sending";
+                $http.post('/api/print', $scope.fields).success(success).error(error);
+            }
+        }]);
+    </script>
 </head>
 <body>
-	<main class="container">
-		<article>
-			<header class="row">
-				<h1 class="col-xs-12">New nametag</h1>
-			</header>
-			<section class="row">
-				
-			</section>
-		</article>
-	</main>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<main class="container" data-ng-app="nametageprinterApp">
+    <article>
+        <header class="row">
+            <h1 class="col-xs-12">New nametag</h1>
+        </header>
+        <section class="row" data-ng-controller="NewTagFormController">
+            <form role="form" action="" class="col-xs-12" name="NewTagForm">
+                <fieldset data-ng-show="formstate == 'form'">
+                    {{range .fields}}
+                    <div class="form-group">
+                        <label for="{{.Name}}">
+                            {{.Label}}
+                            {{if .Required}}
+                            <small>(required)</small>
+                            {{end}}
+                        </label>
+                        <input type="text" class="form-control input-lg"
+                               id="{{.Name}}"
+                               placeholder="{{.Placeholder}}"
+                               data-ng-model="fields.{{.Name}}"
+                               {{if .Required}}required{{end}}
+                                >
+                    </div>
+                    {{end}}
+                    <nav class="pull-right">
+                        <button type="submit" class="btn btn-primary btn-lg" data-ng-disabled="NewTagForm.$invalid"
+                                data-ng-click="submit()">print
+                        </button>
+                    </nav>
+                </fieldset>
+                <div data-ng-show="formstate == 'sending'">
+                    <p>Sending …</p>
+                </div>
+                <div data-ng-show="formstate == 'success'">
+                    <p>Done. Your nametag will appear momentarily.</p>
+                </div>
+                <div data-ng-show="formstate == 'error'">
+                    <p>Error!</p>
+                </div>
+            </form>
+        </section>
+    </article>
+</main>
 </body>
 </html>
