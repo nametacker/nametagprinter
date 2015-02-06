@@ -7,6 +7,7 @@ go:
 
 install:
   - go get github.com/stretchr/testify/assert
+  - go get github.com/wsxiaoys/terminal/color
 
 script:
   - go test ./...
