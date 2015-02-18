@@ -4,12 +4,11 @@
     <title>New nametag | Nametag Printer {{.Version}}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" type="text/css" href="/static/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/vendor/bootstrap/css/bootstrap-theme.min.css">
     <style type="text/css">
         body {
-            font-family: 'Open Sans', serif;
+            font-family: 'Open Sans', Helvetica, Arial, serif;
         }
 
         article header {
@@ -25,7 +24,7 @@
         }
 
     </style>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
+    <script src="/static/vendor/angular/angular.min.js"></script>
     <script type="text/javascript">
         'use strict';
 
@@ -58,6 +57,7 @@
 
             $scope.submit = function () {
                 $scope.formstate = "sending";
+                console.log($scope.fields);
                 $http.post('/api/print', $scope.fields).success(success).error(error);
             }
         }]);
@@ -70,7 +70,7 @@
             <h1 class="col-xs-12">New nametag</h1>
         </header>
         <section class="row" data-ng-controller="NewTagFormController">
-            <form role="form" action="" class="col-xs-12" name="NewTagForm">
+            <form role="form" class="col-xs-12" name="NewTagForm">
                 <fieldset data-ng-show="formstate == 'form'">
                     {{range .fields}}
                     <div class="form-group">

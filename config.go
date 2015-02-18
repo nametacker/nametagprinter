@@ -1,6 +1,6 @@
 package nametagprinter
 
-const VERSION = "v0.0.1"
+const VERSION = "v0.0.2"
 
 type Config struct {
 	Server struct {
@@ -16,6 +16,6 @@ func NewConfig() (c *Config) {
 	c = new(Config)
 	c.Server.Port = 8088
 	c.Server.Address = "0.0.0.0"
-	c.Tag.Template = "nametag.svg"
+	c.Tag.Template = "./upload/nametag.svg"
 	return
 }
