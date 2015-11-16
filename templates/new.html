@@ -67,7 +67,7 @@
 <main class="container" data-ng-app="nametageprinterApp">
     <article>
         <header class="row">
-            <h1 class="col-xs-12">New nametag</h1>
+            <h1 class="col-xs-12">Print a new nametag</h1>
         </header>
         <section class="row" data-ng-controller="NewTagFormController">
             <form role="form" class="col-xs-12" name="NewTagForm">
@@ -99,6 +99,7 @@
                 </div>
                 <div data-ng-show="formstate == 'success'">
                     <p>Done. Your nametag will appear momentarily.</p>
+					<p>Do you want this for your event? Check out <a href="http://nametacker.com/">nametacker.com</a>.</p>
                 </div>
                 <div data-ng-show="formstate == 'error'">
                     <p>Error!</p>
