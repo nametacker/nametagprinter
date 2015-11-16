@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/coderbyheart/nametagprinter"
+	"github.com/nametacker/nametagprinter"
 	"github.com/wsxiaoys/terminal/color"
 	"os"
 )

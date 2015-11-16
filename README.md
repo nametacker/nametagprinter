@@ -1,6 +1,6 @@
 # Nametag printer
 
-[![Travis](https://travis-ci.org/coderbyheart/nametagprinter.svg?branch=master)](https://travis-ci.org/coderbyheart/nametagprinter/)
+[![Travis](https://travis-ci.org/nametacker/nametagprinter.svg?branch=master)](https://travis-ci.org/nametacker/nametagprinter/)
 
 This is a webservice for printing nametags on events.
 
