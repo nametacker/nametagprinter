@@ -99,7 +99,7 @@ func (c *PrintController) PrintTagHandler(w http.ResponseWriter, r *http.Request
 	log.Println(pdffile + " written")
 
 	// Print
-	printCmd := exec.Command("lpr", pdffile)
+	printCmd := exec.Command("lpr", "-P", "Brother_QL-720NW_USB", pdffile)
 	err = printCmd.Start()
 	if err != nil {
 		HttpProblem(w, http.StatusInternalServerError, "Failed send job to printer")
